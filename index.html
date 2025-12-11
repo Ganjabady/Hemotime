@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تارا - محاسبه زمانبندی و دوز تزریق تالاسمی</title>
+    <title>هموتایم - محاسبه زمانبندی و دوز تزریق تالاسمی</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
 </head>
 <body>
     <div class="app-container">
         <header class="header">
-            <h1>🩸 تارا - پروتکل تزریق خون</h1>
+            <h1>🩸 هموتایم - پروتکل تزریق خون</h1>
             <h4 id="current-date" class="date-header"></h4>
         </header>
 
@@ -20,8 +20,9 @@
                 <h2>👤 اطلاعات عمومی</h2>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="currentDate">تاریخ ویزیت فعلی (شمسی):</label>
+                        <label for="currentDate">تاریخ ویزیت فعلی (میلادی):</label>
                         <input type="date" id="currentDate" required> 
+                        <small class="hint">تاریخ ورودی باید به فرمت میلادی باشد. تاریخ خروجی شمسی است.</small>
                     </div>
                     <div class="form-group">
                         <label for="weight">وزن بیمار (کیلوگرم):</label>
