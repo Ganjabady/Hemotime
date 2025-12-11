@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تارا - زمانبندی تزریق تالاسمی</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🩸 تارا (Tara) - زمانبندی تزریق تالاسمی</h1>
+        <h3 id="current-date" class="date-header"></h3>
+
+        <div class="form-group">
+            <label for="currentDate">تاریخ ویزیت فعلی:</label>
+            <input type="date" id="currentDate" required>
+        </div>
+
+        <div class="form-group">
+            <label for="weight">وزن بیمار (کیلوگرم):</label>
+            <input type="number" id="weight" value="70" step="1" required>
+        </div>
+
+        <div class="form-group">
+            <label for="HbPostTarget">Hb هدف پس از تزریق (g/dL):</label>
+            <input type="number" id="HbPostTarget" value="12" step="0.1" required>
+            <small class="hint">مقدار استاندارد معمولاً ۱۲ تا ۱۴ است.</small>
+        </div>
+
+        <div class="form-group">
+            <label for="HbThreshold">Hb آستانه قبل از تزریق (g/dL):</label>
+            <input type="number" id="HbThreshold" value="10" step="0.1" required>
+            <small class="hint">مقدار استاندارد برای ماژور ۹.۵ تا ۱۰.۵ است.</small>
+        </div>
+
+        <div class="form-group">
+            <label for="RateR">نرخ افت Hb (R) در روز (g/dL/day):</label>
+            <select id="RateR" required>
+                <option value="0.25">۰.۲۵ (استاندارد ماژور)</option>
+                <option value="0.30">۰.۳۰ (ماژور با طحال بزرگتر)</option>
+                <option value="0.15">۰.۱۵ (استاندارد اینترمدیا)</option>
+                <option value="custom">ورودی دستی...</option>
+            </select>
+            <input type="number" id="CustomRateR" style="display:none; margin-top: 5px;" placeholder="نرخ افت دستی">
+        </div>
+        
+        <button onclick="calculateNextDate()">محاسبه تاریخ ویزیت بعدی</button>
+
+        <div id="result">
+            تاریخ ویزیت بعدی در اینجا نمایش داده خواهد شد.
+        </div>
+        
+        <div class="footer">
+            توسعه توسط کمک‌کدنویس<br>
+            حسین حوت گنج آبادی - ۰۹۰۳۱۳۷۵۹۰۹
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
