@@ -3,57 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تارا - زمانبندی تزریق تالاسمی</title>
+    <title>هموتایم - محاسبه زمانبندی و دوز تزریق تالاسمی (TIF 2021)</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
 </head>
 <body>
-    <div class="container">
-        <h1>🩸 تارا (Tara) - زمانبندی تزریق تالاسمی</h1>
-        <h3 id="current-date" class="date-header"></h3>
+    <div class="app-container">
+        <header class="header">
+            <h1>🩸 هموتایم (Hemotime) - پروتکل تزریق تالاسمی</h1>
+            <h4 id="current-date" class="date-header"></h4>
+        </header>
 
-        <div class="form-group">
-            <label for="currentDate">تاریخ ویزیت فعلی:</label>
-            <input type="date" id="currentDate" required>
-        </div>
+        <main class="main-content">
+            
+            <div class="card patient-info-card">
+                <h2>👤 اطلاعات بیمار</h2>
+                <div class="form-group">
+                    <label for="currentDate">تاریخ ویزیت فعلی:</label>
+                    <input type="date" id="currentDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="weight">وزن بیمار (کیلوگرم):</label>
+                    <input type="number" id="weight" value="70" step="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="thalassemiaType">نوع تالاسمی و تنظیمات پیش‌فرض:</label>
+                    <select id="thalassemiaType">
+                        <option value="major">تالاسمی ماژور (TDT استاندارد)</option>
+                        <option value="intermedia">تالاسمی اینترمدیا</option>
+                        <option value="custom">تنظیمات دستی/خاص</option>
+                    </select>
+                </div>
+            </div>
 
-        <div class="form-group">
-            <label for="weight">وزن بیمار (کیلوگرم):</label>
-            <input type="number" id="weight" value="70" step="1" required>
-        </div>
+            <div class="card protocol-card">
+                <h2>📝 پارامترهای پروتکل (TIF)</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="HbPostTarget">Hb هدف پس از تزریق ($Hb_{post}$):</label>
+                        <input type="number" id="HbPostTarget" value="13.0" step="0.1" required>
+                        <small class="hint">محدوده استاندارد: 12.0 تا 14.0</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="HbThreshold">Hb آستانه قبل از تزریق ($Hb_{threshold}$):</label>
+                        <input type="number" id="HbThreshold" value="10.0" step="0.1" required>
+                        <small class="hint">محدوده استاندارد: 9.5 تا 10.5</small>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="RateR">نرخ افت Hb ($R$) در روز (g/dL/day):</label>
+                    <input type="number" id="RateR" value="0.25" step="0.01" required>
+                    <small class="hint">محدوده استاندارد: 0.20 تا 0.35. طحال بزرگ $R$ را افزایش می‌دهد.</small>
+                </div>
+            </div>
+            
+            <button onclick="calculateNextDate()">🚀 محاسبه زمانبندی و دوز تزریق</button>
+            
+            <div id="result" class="card result-card">
+                نتیجه محاسبات بر اساس راهنمای TIF 2021 در اینجا نمایش داده خواهد شد.
+            </div>
 
-        <div class="form-group">
-            <label for="HbPostTarget">Hb هدف پس از تزریق (g/dL):</label>
-            <input type="number" id="HbPostTarget" value="12" step="0.1" required>
-            <small class="hint">مقدار استاندارد معمولاً ۱۲ تا ۱۴ است.</small>
-        </div>
+        </main>
 
-        <div class="form-group">
-            <label for="HbThreshold">Hb آستانه قبل از تزریق (g/dL):</label>
-            <input type="number" id="HbThreshold" value="10" step="0.1" required>
-            <small class="hint">مقدار استاندارد برای ماژور ۹.۵ تا ۱۰.۵ است.</small>
-        </div>
-
-        <div class="form-group">
-            <label for="RateR">نرخ افت Hb (R) در روز (g/dL/day):</label>
-            <select id="RateR" required>
-                <option value="0.25">۰.۲۵ (استاندارد ماژور)</option>
-                <option value="0.30">۰.۳۰ (ماژور با طحال بزرگتر)</option>
-                <option value="0.15">۰.۱۵ (استاندارد اینترمدیا)</option>
-                <option value="custom">ورودی دستی...</option>
-            </select>
-            <input type="number" id="CustomRateR" style="display:none; margin-top: 5px;" placeholder="نرخ افت دستی">
-        </div>
-        
-        <button onclick="calculateNextDate()">محاسبه تاریخ ویزیت بعدی</button>
-
-        <div id="result">
-            تاریخ ویزیت بعدی در اینجا نمایش داده خواهد شد.
-        </div>
-        
-        <div class="footer">
-            توسعه توسط کمک‌کدنویس<br>
-            حسین حوت گنج آبادی - ۰۹۰۳۱۳۷۵۹۰۹
-        </div>
+        <footer class="footer">
+            <p>توسعه بر اساس راهنماهای TIF 2021 توسط کمک‌کدنویس</p>
+            <p>حسین حوت گنج آبادی - ۰۹۰۳۱۳۷۵۹۰۹</p>
+        </footer>
     </div>
 
     <script src="script.js"></script>
