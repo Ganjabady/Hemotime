@@ -5,6 +5,13 @@ const defaults = {
     intermedia: { HbPost: 11.5, HbThreshold: 7.0, RateR: 0.15 }
 };
 
+// عناصر ورودی که باید بر اساس نوع تالاسمی کنترل شوند
+const inputElements = {
+    HbPostTarget: document.getElementById('HbPostTarget'),
+    HbThreshold: document.getElementById('HbThreshold'),
+    RateR: document.getElementById('RateR')
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     // 1. نمایش تاریخ روز جاری
     document.getElementById('current-date').textContent = new Date().toLocaleDateString('fa-IR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
@@ -16,20 +23,39 @@ document.addEventListener('DOMContentLoaded', () => {
     const dd = String(today.getDate()).padStart(2, '0');
     document.getElementById('currentDate').value = `${yyyy}-${mm}-${dd}`;
     
-    // 3. تنظیمات پیش‌فرض بر اساس نوع تالاسمی
+    // 3. مدیریت تنظیمات پیش‌فرض و حالت دستی
     const typeSelect = document.getElementById('thalassemiaType');
-    typeSelect.addEventListener('change', () => {
+    
+    // تابع اعمال تنظیمات (پیش‌فرض یا دستی)
+    const applySettings = () => {
         const type = typeSelect.value;
-        if (type !== 'custom') {
-            document.getElementById('HbPostTarget').value = defaults[type].HbPost.toFixed(1);
-            document.getElementById('HbThreshold').value = defaults[type].HbThreshold.toFixed(1);
-            document.getElementById('RateR').value = defaults[type].RateR.toFixed(2);
-        }
-    });
 
-    // تنظیم مقادیر پیش‌فرض اولیه (ماژور)
-    typeSelect.dispatchEvent(new Event('change'));
+        if (type === 'custom') {
+            // حالت دستی: ورودی‌ها فعال می‌شوند
+            for (const key in inputElements) {
+                inputElements[key].disabled = false;
+                inputElements[key].style.backgroundColor = 'white'; // روشن کردن پس‌زمینه
+            }
+        } else {
+            // حالت پیش‌فرض: ورودی‌ها غیرفعال شده و مقادیر پر می‌شوند
+            const setting = defaults[type];
+            inputElements.HbPostTarget.value = setting.HbPost.toFixed(1);
+            inputElements.HbThreshold.value = setting.HbThreshold.toFixed(1);
+            inputElements.RateR.value = setting.RateR.toFixed(2);
+            
+            for (const key in inputElements) {
+                inputElements[key].disabled = true;
+                inputElements[key].style.backgroundColor = ''; // برگرداندن به حالت disabled
+            }
+        }
+    };
+
+    typeSelect.addEventListener('change', applySettings);
+
+    // اعمال تنظیمات پیش‌فرض اولیه (ماژور)
+    applySettings(); 
 });
+
 
 function calculateNextDate() {
     // 1. گرفتن ورودی‌ها
@@ -46,12 +72,11 @@ function calculateNextDate() {
         return;
     }
     if (HbPostTarget <= HbThreshold || RateR <= 0) {
-        resultDiv.innerHTML = '<div class="warning-box">⚠️ Hb هدف باید بزرگتر از Hb آستانه باشد و نرخ افت باید مثبت باشد.</div>';
+        resultDiv.innerHTML = '<div class="warning-box">⚠️ Hb هدف باید بزرگتر از Hb آستانه باشد و نرخ افت (R) باید مثبت باشد.</div>';
         return;
     }
 
     // --- 3. محاسبه زمان‌بندی (T) بر اساس فرمول TIF ---
-    // T (روز) = (Hb_post - Hb_threshold) / R
     const deltaHb = HbPostTarget - HbThreshold;
     const T_days = deltaHb / RateR;
     const roundedDays = Math.ceil(T_days); 
@@ -87,22 +112,22 @@ function calculateNextDate() {
     resultDiv.innerHTML = `
         <div class="result-title">📆 تاریخ ویزیت بعدی</div>
         <span class="result-value" style="color: ${resultColor};">${nextDateFa}</span>
-        <span style="font-size: 1.1em; display: block;">( ${roundedDays} روز بعد )</span>
+        <span style="font-size: 1.2em; display: block; margin-top: 5px;">( ${roundedDays} روز بعد )</span>
         <hr style="border-top: 1px dashed #ced4da; margin: 15px 0;">
 
         <div class="units-info">
             💉 **تخمین دوز و حجم مورد نیاز:**
             <ul>
-                <li>**واحد خونی مورد نیاز:** **${unitsNeeded} واحد** (بر اساس ۳۰۰ mL در واحد)</li>
+                <li>**واحد خونی مورد نیاز (تخمینی):** <span style="font-weight:900; color:var(--primary-color)">${unitsNeeded} واحد</span></li>
                 <li>**حجم کل تزریق (تخمینی):** ${totalVolume_ml.toFixed(0)} میلی‌لیتر</li>
-                <li>**حجم به ازای کیلوگرم:** ${requiredVolume_mlkg.toFixed(1)} mL/kg (حداکثر استاندارد: ۱۵-۲۰ mL/kg)</li>
+                <li>**حجم به ازای کیلوگرم:** ${requiredVolume_mlkg.toFixed(1)} mL/kg (هدف: ۸-۱۵ mL/kg)</li>
             </ul>
         </div>
         
         ${clinicalWarning ? `<div class="warning-box">${clinicalWarning}</div>` : ''}
 
         <small class="hint" style="margin-top: 10px;">
-            **خلاصه فرمول زمان‌بندی:** $\frac{${HbPostTarget.toFixed(1)} - ${HbThreshold.toFixed(1)}}{${RateR.toFixed(2)}} = ${T_days.toFixed(1)} \text{ روز} \to {roundedDays} \text{ روز}$
+            **خلاصه محاسبه زمان‌بندی (T):** $\\frac{Hb_{post} - Hb_{threshold}}{R} = \\frac{${HbPostTarget.toFixed(1)} - ${HbThreshold.toFixed(1)}}{${RateR.toFixed(2)}} \approx {T_days.toFixed(1)} \text{ روز}$
         </small>
     `;
 }
