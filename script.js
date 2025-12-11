@@ -1,11 +1,12 @@
 // script.js
 
+// مقادیر پیش‌فرض پروتکل بر اساس TIF 2021
 const defaults = {
     major: { HbPost: 13.0, HbThreshold: 10.0, RateR: 0.25 },
     intermedia: { HbPost: 11.5, HbThreshold: 7.0, RateR: 0.15 }
 };
 
-// عناصر ورودی که باید بر اساس نوع تالاسمی کنترل شوند
+// عناصر ورودی که با حالت "دستی" فعال/غیرفعال می‌شوند
 const inputElements = {
     HbPostTarget: document.getElementById('HbPostTarget'),
     HbThreshold: document.getElementById('HbThreshold'),
@@ -20,7 +21,8 @@ function toPersianDate(date) {
     return date.toLocaleDateString('fa-IR', { 
         year: 'numeric', 
         month: 'long', 
-        day: 'numeric' 
+        day: 'numeric' ,
+        weekday: 'long'
     });
 }
 // ---------------------------------------------------
@@ -36,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const dd = String(today.getDate()).padStart(2, '0');
     document.getElementById('currentDate').value = `${yyyy}-${mm}-${dd}`;
     
-    // 3. مدیریت تنظیمات پیش‌فرض و حالت دستی (همانند قبل)
+    // 3. مدیریت تنظیمات پیش‌فرض و حالت دستی (فعال/غیرفعال کردن ورودی‌ها)
     const typeSelect = document.getElementById('thalassemiaType');
     
     const applySettings = () => {
@@ -87,18 +89,24 @@ function calculateNextDate() {
     const T_days = deltaHb / RateR;
     const roundedDays = Math.ceil(T_days); 
 
-    // --- 3. محاسبه دوز/حجم (با اعمال محدودیت ایران) ---
+    // --- 3. محاسبه دوز/حجم (با اعمال محدودیت بالینی ایران) ---
+    // فرض: هر g/dL افزایش Hb ≈ 4 mL/kg packed RBC
     const requiredVolume_mlkg = deltaHb * 4; 
     let totalVolume_ml = requiredVolume_mlkg * patientWeight;
-    let unitsNeeded = Math.ceil(totalVolume_ml / 300); // محاسبه بر اساس فرمول
+    let unitsNeeded = Math.ceil(totalVolume_ml / 300); // فرض هر واحد RBC فشرده ≈ 300 mL
 
     // اعمال محدودیت دوز در ایران (حداکثر ۲ واحد)
     let unitWarning = '';
-    if (unitsNeeded > 2) {
-        unitsNeeded = 2; // محدود کردن تعداد واحد به حداکثر ۲
-        totalVolume_ml = 600; // تنظیم حجم بر اساس ۲ واحد (2 * 300 mL)
-        unitWarning = '<br>🛑 **توجه (بالینی ایران):** دوز محاسبه‌شده بیش از ۲ واحد بود، اما به دلیل پروتکل ایران، روی **۲ واحد** (تخمینی ۶۰۰ میلی‌لیتر) تنظیم شد.';
+    const MAX_UNITS = 2;
+    
+    if (unitsNeeded > MAX_UNITS) {
+        unitsNeeded = MAX_UNITS; // محدود کردن تعداد واحد به حداکثر ۲
+        totalVolume_ml = MAX_UNITS * 300; // تنظیم حجم بر اساس ۲ واحد (2 * 300 mL)
+        unitWarning = '<br>🛑 **توجه (پروتکل ملی):** دوز محاسبه‌شده بیش از ۲ واحد بود، اما به دلیل پروتکل ایران، روی **۲ واحد** تنظیم شد.';
     }
+    
+    // حجم واقعی به ازای کیلوگرم پس از اعمال محدودیت
+    const actualVolume_mlkg = totalVolume_ml / patientWeight;
 
     // 4. محاسبه تاریخ جدید به شمسی
     const currentDate = new Date(currentDateStr);
@@ -111,10 +119,10 @@ function calculateNextDate() {
     let resultColor = 'var(--secondary-color)';
     
     if (T_days < 14) {
-        clinicalWarning = '⚠️ **هشدار TIF:** فاصله تزریق کمتر از ۱۴ روز است. بررسی هیپرترانسفوزیون یا طحال فعال توصیه می‌شود.';
+        clinicalWarning = '⚠️ **هشدار TIF:** فاصله تزریق کمتر از ۱۴ روز است. (طحال فعال یا دوز بالا).';
         resultColor = 'var(--danger-color)';
     } else if (T_days > 35) {
-        clinicalWarning = '⚠️ **هشدار TIF:** فاصله تزریق بیش از ۳۵ روز است. بررسی احتمال R پایین توصیه می‌شود.';
+        clinicalWarning = '⚠️ **هشدار TIF:** فاصله تزریق بیش از ۳۵ روز است. (بررسی نرخ R).';
     }
     if (HbPostTarget > 15.0) {
         clinicalWarning += (clinicalWarning ? '<br>' : '') + '🔴 **هشدار:** Hb پس از تزریق بالای ۱۵ g/dL است. خطر ویسکوزیته وجود دارد.';
@@ -133,7 +141,7 @@ function calculateNextDate() {
             <ul>
                 <li>**واحد خونی مورد نیاز (تنظیم‌شده):** <span style="font-weight:900; color:var(--danger-color)">${unitsNeeded} واحد</span></li>
                 <li>**حجم کل تزریق (تخمینی):** ${totalVolume_ml.toFixed(0)} میلی‌لیتر</li>
-                <li>**حجم به ازای کیلوگرم:** ${(totalVolume_ml / patientWeight).toFixed(1)} mL/kg (هدف: ۸-۱۵ mL/kg)</li>
+                <li>**حجم به ازای کیلوگرم:** ${actualVolume_mlkg.toFixed(1)} mL/kg (هدف: ۸-۱۵ mL/kg)</li>
             </ul>
         </div>
         
