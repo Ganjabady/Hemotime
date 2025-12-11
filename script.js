@@ -1,4 +1,3 @@
-// script.js
 
 // مقادیر پیش‌فرض پروتکل بر اساس TIF 2021
 const defaults = {
