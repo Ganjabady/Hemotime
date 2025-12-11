@@ -1,13 +1,13 @@
 /* style.css */
 :root {
-    --primary-color: #8B0000; /* قرمز تیره/شرابی برای قدرت و توجه */
-    --secondary-color: #4CAF50; /* سبز برای نتیجه مثبت */
-    --danger-color: #FF4500; /* قرمز-نارنجی برای هشدار */
-    --background-color: #f0f2f5; /* خاکستری روشن مدرن */
+    --primary-color: #004d40; /* سبز تیره زیتونی - شیک و پزشکی */
+    --secondary-color: #388e3c; /* سبز روشن‌تر */
+    --danger-color: #d32f2f; /* قرمز استاندارد */
+    --background-color: #e8eaf6; /* آبی روشن ملایم */
     --card-background: #ffffff;
-    --text-color: #212529;
-    --shadow-heavy: 0 10px 20px rgba(0, 0, 0, 0.1);
-    --shadow-light: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --text-color: #212121;
+    --shadow-heavy: 0 12px 25px rgba(0, 0, 0, 0.15);
+    --shadow-light: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
 body {
@@ -16,11 +16,11 @@ body {
     background-color: var(--background-color);
     color: var(--text-color);
     line-height: 1.6;
-    padding: 20px;
+    padding: 30px 20px;
 }
 
 .app-container {
-    max-width: 800px;
+    max-width: 850px;
     margin: 0 auto;
 }
 
@@ -28,13 +28,13 @@ body {
 .header {
     text-align: center;
     padding: 20px 0;
-    margin-bottom: 25px;
+    margin-bottom: 30px;
 }
 .header h1 {
     color: var(--primary-color);
-    font-size: 2.2em;
+    font-size: 2.5em;
     margin-bottom: 5px;
-    border-bottom: 4px solid var(--primary-color);
+    border-bottom: 5px solid var(--primary-color);
     display: inline-block;
     padding-bottom: 5px;
 }
@@ -43,109 +43,83 @@ body {
 .card {
     background: var(--card-background);
     padding: 30px;
-    border-radius: 15px; /* گوشه‌های گردتر */
+    border-radius: 20px; /* گوشه‌های خیلی گرد */
     box-shadow: var(--shadow-heavy);
-    margin-bottom: 30px;
-    transition: transform 0.3s ease;
+    margin-bottom: 35px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .card:hover {
-    transform: translateY(-3px); /* حس تعاملی بیشتر */
+    transform: translateY(-5px); /* حس پویایی بیشتر */
 }
 .card h2 {
-    color: var(--text-color);
+    color: var(--primary-color);
+    font-weight: 700;
     margin-top: 0;
     padding-bottom: 10px;
-    border-bottom: 1px solid #e9ecef;
+    border-bottom: 1px solid #cfd8dc;
 }
 
 /* ورودی‌ها و فرم */
-.form-row {
-    display: flex;
-    gap: 20px;
-}
-.form-row .form-group {
-    flex: 1;
-}
-.form-group {
-    margin-bottom: 20px;
-}
-label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 700;
-    color: #495057;
-}
+/* (همانند قبل، اما با رنگ‌های جدید) */
 input[type="date"], input[type="number"], select {
-    width: 100%;
-    padding: 14px;
-    border: 2px solid #ced4da; /* مرز ضخیم‌تر */
-    border-radius: 8px;
-    box-sizing: border-box;
-    font-size: 16px;
-    transition: border-color 0.3s, background-color 0.3s;
+    border: 2px solid #b0bec5;
+    border-radius: 10px;
 }
 input:focus, select:focus {
     border-color: var(--primary-color);
-    outline: none;
-    background-color: #fff8f8; /* تغییر رنگ هنگام فوکوس */
-}
-/* حالت غیر فعال */
-input:disabled, select:disabled {
-    background-color: #e9ecef;
-    cursor: not-allowed;
-    color: #6c757d;
+    box-shadow: 0 0 0 4px rgba(0, 77, 64, 0.2);
 }
 
 /* دکمه */
 button {
-    background-color: var(--primary-color);
+    background-color: var(--danger-color); /* دکمه اصلی قرمز شد برای جلب توجه */
     color: white;
-    padding: 18px 20px;
-    border: none;
-    border-radius: 10px;
-    font-size: 1.2em;
-    font-weight: bold;
-    box-shadow: 0 6px 12px rgba(139, 0, 0, 0.3);
+    padding: 20px 20px;
+    border-radius: 12px;
+    font-size: 1.3em;
+    box-shadow: 0 8px 15px rgba(211, 47, 47, 0.4);
 }
 button:hover {
-    background-color: #a50000;
+    background-color: #e53935;
+    transform: translateY(-2px);
 }
 
-/* نتایج */
+/* نتایج (برجسته) */
 .result-card {
-    background-color: #f0fff0; /* رنگ ملایم تر */
+    background-color: #e8f5e9;
     border: 3px solid var(--secondary-color);
+    text-align: center;
 }
 .result-title {
     color: var(--primary-color);
-    font-size: 1.6em;
-    font-weight: 900;
-    margin-bottom: 10px;
+    font-size: 1.8em;
 }
 .result-value {
-    font-size: 2.8em;
+    font-size: 3.2em;
     color: var(--danger-color);
-    font-weight: 900;
-    display: block;
-    line-height: 1;
 }
-.units-info ul {
-    list-style: none;
-    padding: 0;
-    text-align: right;
-    margin-top: 15px;
+.units-info {
+    font-size: 1.1em;
+    font-weight: 500;
 }
 .units-info ul li {
-    background-color: #f7fcf7;
-    padding: 8px;
+    background-color: #f1f8e9;
     border-left: 4px solid var(--secondary-color);
-    margin-bottom: 5px;
 }
 .warning-box {
-    background-color: #ffe0e0; 
-    color: #8b0000;
+    background-color: #ffccbc; /* نارنجی-قرمز ملایم */
+    color: #b71c1c;
     border: 1px solid var(--danger-color);
 }
-.footer {
-    margin-top: 50px;
+
+/* استایل برای نمادهای ریاضی (R, Hb) */
+.math-symbol {
+    font-family: 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+.subscript {
+    font-size: 0.7em;
+    vertical-align: sub;
 }
