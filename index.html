@@ -20,8 +20,8 @@
                 <h2>👤 اطلاعات عمومی</h2>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="currentDate">تاریخ ویزیت فعلی:</label>
-                        <input type="date" id="currentDate" required>
+                        <label for="currentDate">تاریخ ویزیت فعلی (شمسی):</label>
+                        <input type="date" id="currentDate" required> 
                     </div>
                     <div class="form-group">
                         <label for="weight">وزن بیمار (کیلوگرم):</label>
@@ -44,22 +44,22 @@
 
                 <div class="form-row" id="protocol-inputs">
                     <div class="form-group">
-                        <label for="HbPostTarget">هموگلوبین هدف پس از تزریق ($Hb_{post}$):</label>
+                        <label for="HbPostTarget">هموگلوبین هدف پس از تزریق (Hb<span class="subscript">post</span>):</label>
                         <input type="number" id="HbPostTarget" value="13.0" step="0.1" disabled required>
-                        <small class="hint">مقدار استاندارد: 12.0 تا 14.0 g/dL</small>
+                        <small class="hint">محدوده استاندارد: 12.0 تا 14.0 g/dL</small>
                     </div>
                     
                     <div class="form-group">
-                        <label for="HbThreshold">هموگلوبین آستانه قبل از تزریق ($Hb_{threshold}$):</label>
+                        <label for="HbThreshold">هموگلوبین آستانه قبل از تزریق (Hb<span class="subscript">threshold</span>):</label>
                         <input type="number" id="HbThreshold" value="10.0" step="0.1" disabled required>
-                        <small class="hint">مقدار استاندارد: 9.5 تا 10.5 g/dL</small>
+                        <small class="hint">محدوده استاندارد: 9.5 تا 10.5 g/dL</small>
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label for="RateR">سرعت افت روزانه Hb (نرخ $R$):</label>
+                    <label for="RateR">سرعت افت روزانه Hb (نرخ R):</label>
                     <input type="number" id="RateR" value="0.25" step="0.01" disabled required>
-                    <small class="hint">محدوده استاندارد: 0.20 تا 0.35 g/dL/day. (طحال بزرگ $R$ را افزایش می‌دهد)</small>
+                    <small class="hint">محدوده استاندارد: 0.20 تا 0.35 g/dL/day. (طحال بزرگ R را افزایش می‌دهد)</small>
                 </div>
             </div>
             
