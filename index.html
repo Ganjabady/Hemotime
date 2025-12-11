@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>هموتایم - محاسبه زمانبندی و دوز تزریق تالاسمی</title>
+    <title>هموتایم - پروتکل تزریق خون</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
 </head>
@@ -20,9 +20,9 @@
                 <h2>👤 اطلاعات عمومی</h2>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="currentDate">تاریخ ویزیت فعلی (میلادی):</label>
-                        <input type="date" id="currentDate" required> 
-                        <small class="hint">تاریخ ورودی باید به فرمت میلادی باشد. تاریخ خروجی شمسی است.</small>
+                        <label for="currentDate">تاریخ ویزیت فعلی (شمسی):</label>
+                        <input type="text" id="currentDate" value="1404/01/01" placeholder="مثال: ۱۴۰۴/۰۳/۱۵" required> 
+                        <small class="hint">تاریخ را با فرمت سال/ماه/روز شمسی وارد کنید.</small>
                     </div>
                     <div class="form-group">
                         <label for="weight">وزن بیمار (کیلوگرم):</label>
@@ -73,8 +73,7 @@
         </main>
 
         <footer class="footer">
-            <p>توسعه بر اساس راهنماهای TIF 2021 توسط کمک‌کدنویس</p>
-            <p>حسین حوت گنج آبادی - ۰۹۰۳۱۳۷۵۹۰۹</p>
+            <p>توسعه بر اساس راهنماهای TIF 2021 توسط حسین حوت گنج آبادی</p>
         </footer>
     </div>
 
